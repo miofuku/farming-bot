@@ -1,0 +1,8 @@
+# common requirements
+neo4j==5.20.0
+
+typing_extensions==4.11.0
+
+# web framework
+uvicorn==0.29.0
+fastapi==0.111.0
