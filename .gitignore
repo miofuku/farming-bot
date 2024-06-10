@@ -1,6 +1,12 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# dependencies
+node_modules
+bower_components
 
 .idea
+
+# build files
+build
+
+# misc
+.DS_Store
+npm-debug.log
