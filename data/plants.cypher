@@ -4,6 +4,37 @@
 // Have you run it twice? Use `MATCH (n) WHERE (n:Vegetable OR n:Fruit) DETACH DELETE n` to start over
 
 
+// Create PlantType nodes
+CREATE (vegetable:PlantType {name:'Vegetable'})
+CREATE (flower:PlantType {name:'Flower'})
+CREATE (grain:PlantType {name:'Grain'})
+CREATE (fruit:PlantType {name:'Fruit'})
+CREATE (herb:PlantType {name:'Herb'})
+
+// Create Climate nodes
+CREATE (tropical:Climate {name:'Tropical'})
+CREATE (temperate:Climate {name:'Temperate'})
+CREATE (mediterranean:Climate {name:'Mediterranean'})
+CREATE (arid:Climate {name:'Arid'})
+
+// Create Soil nodes
+CREATE (sandy:SoilType {name:'Sandy'})
+CREATE (loamy:SoilType {name:'Loamy'})
+CREATE (clay:SoidType {name:'Clay'})
+
+// Create Pest nodes
+CREATE (insect:PestType {name:'Insect'})
+CREATE (disease:PestType {name:'Disease'})
+
+// Create Fertilizer nodes
+CREATE (fertilizer:FertilizerType {name:'Fertilizer'})
+
+// Create Period nodes
+CREATE (seedling:PeriodType {name:'Seedling'})
+CREATE (planting:PeriodType {name:'Planting'})
+CREATE (transplant:PeriodType {name:'Transplant'})
+CREATE (harvest:PeriodType {name:'Harvest'})
+
 // Amaryllidaceae family
 CREATE (amaryllidaceae:Family {name:'Amaryllidaceae'})
 CREATE (allium:Genus {name:'Allium'}) 
