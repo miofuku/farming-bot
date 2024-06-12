@@ -20,7 +20,7 @@ CREATE (arid:Climate {name:'Arid'})
 // Create Soil nodes
 CREATE (sandy:SoilType {name:'Sandy'})
 CREATE (loamy:SoilType {name:'Loamy'})
-CREATE (clay:SoidType {name:'Clay'})
+CREATE (clay:SoilType {name:'Clay'})
 
 // Create Pest nodes
 CREATE (insect:PestType {name:'Insect'})
@@ -29,18 +29,12 @@ CREATE (disease:PestType {name:'Disease'})
 // Create Fertilizer nodes
 CREATE (fertilizer:FertilizerType {name:'Fertilizer'})
 
-// Create Period nodes
-CREATE (seedling:PeriodType {name:'Seedling'})
-CREATE (planting:PeriodType {name:'Planting'})
-CREATE (transplant:PeriodType {name:'Transplant'})
-CREATE (harvest:PeriodType {name:'Harvest'})
-
 // Amaryllidaceae family
 CREATE (amaryllidaceae:Family {name:'Amaryllidaceae'})
 CREATE (allium:Genus {name:'Allium'}) 
-CREATE (garlic:Vegetable {name:'Garlic', height:'low', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['P','K'], ph:[5.5,6.7], season:['spring','autumn'], light_hour:8, temp_seed:[12,16], temp_grow:[17,22], temp_fruit:[20,25], water_seed:'70%', water_grow:'70%', water_fruit:'50%', days:280})
-CREATE (springOnion:Vegetable {name:'Spring Onion', height:'low', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['N','K'], ph:[7,7.4], season:['spring','autumn'], light_hour:6, temp_seed:[7,20], temp_grow:[13,25], water_seed:'70%', water_grow:'70%', days:280})
-CREATE (leek:Vegetable {name:'Leek', height:'low', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['N','K'], ph:[7,7.8], season:['spring','autumn'], light_hour:6, temp_seed:[15,20], temp_grow:[15,22], water_seed:'70%', water_grow:'70%', days:180})
+CREATE (garlic:Plant {name:'Garlic', binomial_name:'', height:'low', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['P','K'], ph:[5.5,6.7], season:['spring','autumn'], light_hour:8, temp_seed:[12,16], temp_grow:[17,22], temp_fruit:[20,25], water_seed:'70%', water_grow:'70%', water_fruit:'50%', days:280})
+CREATE (springOnion:Plant {name:'Spring Onion', height:'low', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['N','K'], ph:[7,7.4], season:['spring','autumn'], light_hour:6, temp_seed:[7,20], temp_grow:[13,25], water_seed:'70%', water_grow:'70%', days:280})
+CREATE (leek:Plant {name:'Leek', height:'low', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['N','K'], ph:[7,7.8], season:['spring','autumn'], light_hour:6, temp_seed:[15,20], temp_grow:[15,22], water_seed:'70%', water_grow:'70%', days:180})
 CREATE 
   (allium)-[:IN_FAMILY]->(amaryllidaceae),
   (garlic)-[:IN_GENUS]->(allium),
