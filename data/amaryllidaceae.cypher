@@ -106,3 +106,25 @@ CREATE (p)-[:SUITABLE_SEASON]->(s)
 MATCH (p:Plant), (shp:SoilHumidityPercentage)
 WHERE p.name IN ['Ornamental Onion', 'Onion', 'Garlic', 'Leek', 'Daffodil'] AND shp.name = 'Moderate'
 CREATE (p)-[:SUITABLE_SOIL_HUMIDITY]->(shp)
+
+// Link plants to Companion
+MATCH (p:Plant), (c:Plant)
+WHERE p.name IN ['Onion', 'Garlic', 'Leek'] AND c.name = 'Carrot'
+CREATE (p)-[:COMPANION_WITH]->(c)
+
+MATCH (p:Plant), (c:Plant)
+WHERE p.name IN ['Onion', 'Garlic'] AND c.name = 'Marigold'
+CREATE (p)-[:COMPANION_WITH]->(c)
+
+MATCH (p:Plant), (c:Plant)
+WHERE p.name IN ['Onion', 'Garlic'] AND c.name = 'Nasturtium'
+CREATE (p)-[:COMPANION_WITH]->(c)
+
+// Link plants to Competitive plant
+MATCH (p:Plant), (cp:Plant)
+WHERE p.name IN ['Onion', 'Garlic'] AND cp.name = 'Pea'
+CREATE (p)-[:COMPETES_WITH]->(cp)
+
+MATCH (p:Plant), (cp:Plant)
+WHERE p.name IN ['Ornamental Onion', 'Onion', 'Garlic', 'Leek'] AND cp.name = 'Fennel'
+CREATE (p)-[:COMPETES_WITH]->(cp)
