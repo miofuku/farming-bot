@@ -75,15 +75,3 @@ CREATE (:SoilHumidityPercentage {name: 'Moderate', range: '40-60%'})
 CREATE (:SoilHumidityPercentage {name: 'High', range: '60-80%'})
 CREATE (:SoilHumidityPercentage {name: 'Very High', range: '80-100%'})
 
-// Create Companion and Competitive plant nodes
-CREATE (:Plant {name: 'Carrot', description: 'A root vegetable that can be grown as a companion for onions and leeks'})
-CREATE (:Plant {name: 'Marigold', description: 'A flowering plant that helps repel nematodes and other pests, making it a good companion for onions and garlic'})
-CREATE (:Plant {name: 'Nasturtium', description: 'A flowering plant that attracts beneficial insects and can be a companion for onions and garlic'})
-CREATE (:Plant {name: 'Tomato', description: 'A companion plant for carrots and celery that can help repel certain pests'})
-CREATE (:Plant {name: 'Radish', description: 'A companion plant for carrots and cilantro/coriander that can help break up soil and attract beneficial insects'})
-CREATE (:Plant {name: 'Pea', description: 'A legume that competes for nutrients with onions and garlic'})
-CREATE (:Plant {name: 'Fennel', description: 'A herb that can inhibit the growth of onions and other alliums'})
-CREATE (:Plant {name: 'Dill', description: 'A competitive plant for carrots and cilantro/coriander that can inhibit their growth'})
-CREATE (:Plant {name: 'Potato', description: 'A competitive plant for carrots and celery as they have similar nutrient requirements'})
-
-
