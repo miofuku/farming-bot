@@ -2,27 +2,6 @@
 // This is an initialization script for the farming app
 // Run it only once ;)
 
-// Apiaceae family
-CREATE (apiaceae:Family {name:'Apiaceae'})
-CREATE (apium:Genus {name:'Apium'}) 
-CREATE (coriandrum:Genus {name:'Coriandrum'}) 
-CREATE (celery:Vegetable {name:'Celery', height:'medium', soil_humid:'wet', fertile:'=', fert_growth:['N'], fert_fruit:['N','K'], ph:[6,7.5], season:['spring','autumn','winter'], light_hour:4, temp_seed:[18,25], temp_grow:[15,20], water_seed:'60%', water_grow:'80%', days:80})  
-CREATE (coriander:Vegetable {name:'Coriander', height:'low', soil_humid:'wet', fertile:'=', fert_growth:['N'], fert_fruit:['N','K'], ph:[6,7], season:['spring','autumn','winter'], light_hour:4, temp_seed:[18,20], temp_grow:[15,25], water_seed:'60%', water_grow:'80%', days:50})  
-CREATE 
-  (apium)-[:IN_FAMILY]->(apiaceae),
-  (coriandrum)-[:IN_FAMILY]->(apiaceae),
-  (celery)-[:IN_GENUS]->(apium),
-  (coriander)-[:IN_GENUS]->(coriandrum)
-
-
-// Asteraceae family
-CREATE (asteraceae:Family {name:'Asteraceae'})
-CREATE (lactuca:Genus {name:'Lactuca'}) 
-CREATE (lettuce:Vegetable {name:'Lettuce', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['N','K'], ph:[5.8,6.6], season:['spring','autumn'], light_hour:8, temp_seed:[15,20], temp_grow:[15,22], temp_fruit:[17,20], water_seed:'90%', water_grow:'80%', water_fruit:'90%', days:90})
-CREATE 
-  (lactuca)-[:IN_FAMILY]->(asteraceae),
-  (lettuce)-[:IN_GENUS]->(lactuca)
-
 
 // Brassicaceae family
 CREATE (brassicaceae:Family {name:'Brassicaceae'})
