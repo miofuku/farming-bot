@@ -3,33 +3,6 @@
 // Run it only once ;)
 
 
-// Brassicaceae family
-CREATE (brassicaceae:Family {name:'Brassicaceae'})
-CREATE (brassica:Genus {name:'Brassica'})
-CREATE (raphanus:Genus {name:'Raphanus'})
-CREATE (chineseCabbage:Vegetable {name:'Chinese Cabbage', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[6.5,7.5], season:['spring','autumn'], light_hour:6, temp_seed:[20,25], temp_plant:[17,22], temp_grow:[12,22], water_seed:'80%', water_grow:'70%', water_fruit:'80%', days:80})
-CREATE (greenRadish:Vegetable {name:'Green Radish', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[7,7.5], season:['spring','autumn'], light_hour:6, temp_seed:[20,25], temp_plant:[5,28], temp_grow:[6,20], water_seed:'80%', water_grow:'60%', water_fruit:'75%', days:70})
-CREATE (pakChoi:Vegetable {name:'Pak Choi', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[6,7], season:['spring','autumn'], light_hour:6, temp_seed:[20,25], temp_grow:[15,20], water_seed:'20%', water_grow:'40%', water_fruit:'60%', days:25})
-CREATE (tatsoi:Vegetable {name:'Tatsoi', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[6,7], season:['autumn','winter'], light_hour:6, temp_seed:[15,25], temp_grow:[5,20], water_seed:'20%', water_grow:'40%', days:80})
-CREATE (babyCabbage:Vegetable {name:'Baby Cabbage', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[6.5,7.5], season:['spring','autumn'], light_hour:6, temp_seed:[20,25], temp_plant:[15,20], temp_grow:[5,25], water_seed:'20%', water_grow:'40%', days:50})
-CREATE (redRadish:Vegetable {name:'Red Radish', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[7,7.5], season:['spring','autumn'], light_hour:6, temp_seed:[20,25], temp_grow:[8,24], temp_fruit:[10,18], water_seed:'80%', water_grow:'70%', water_fruit:'75%', days:25})
-CREATE (chineseBroccoli:Vegetable {name:'Chinese Broccoli', height:'low', soil_humid:'wet', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[6.5,8], season:['spring','summer'], light_hour:6, temp_seed:[25,30], temp_grow:[15,25], temp_fruit:[10,18], water_seed:'80%', water_grow:'90%', days:80})
-CREATE (kohlrabi:Vegetable {name:'Kohlrabi', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['K'], ph:[6.5,7], season:['spring','autumn'], light_hour:6, temp_seed:[20,25], temp_grow:[15,25], temp_fruit:[18,22], water_seed:'60%', water_grow:'70%', days:70})
-CREATE (kale:Vegetable {name:'Kale', height:'high', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['K'], ph:[6.5,7], season:['spring','autumn'], light_hour:8, temp_seed:[20,25], temp_grow:[10,20], water_seed:'80%', water_grow:'70%', days:70})
-CREATE 
-  (brassica)-[:IN_FAMILY]->(brassicaceae),
-  (raphanus)-[:IN_FAMILY]->(brassicaceae),
-  (chineseCabbage)-[:IN_GENUS]->(brassica),
-  (greenRadish)-[:IN_GENUS]->(raphanus),
-  (pakChoi)-[:IN_GENUS]->(brassica),
-  (tatsoi)-[:IN_GENUS]->(brassica),
-  (babyCabbage)-[:IN_GENUS]->(brassica),
-  (redRadish)-[:IN_GENUS]->(raphanus),
-  (chineseBroccoli)-[:IN_GENUS]->(brassica),
-  (kohlrabi)-[:IN_GENUS]->(brassica),
-  (kale)-[:IN_GENUS]->(brassica)
-
-
 // Convolvulaceae family
 CREATE (convolvulaceae:Family {name:'Convolvulaceae'})
 CREATE (ipomoea:Genus {name:'Ipomoea'}) 
