@@ -3,17 +3,6 @@
 // Run it only once ;)
 
 
-// Convolvulaceae family
-CREATE (convolvulaceae:Family {name:'Convolvulaceae'})
-CREATE (ipomoea:Genus {name:'Ipomoea'}) 
-CREATE (sweetPotato:Vegetable {name:'Sweet Potato', height:'low', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['K'], ph:[5.2,6.7], season:['spring','summer'], light_hour:8, temp_seed:[20,32], temp_grow:[21,26], temp_fruit:[21,29], water_seed:'70%', water_grow:'80%', water_fruit:'70%', days:150})
-CREATE (waterSpinach:Vegetable {name:'Water Spinach', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['K'], ph:[5.5,7.5], season:['summer'], light_hour:8, temp_seed:[20,32], temp_grow:[20,25], water_seed:'80%', water_grow:'85%', days:60})
-CREATE 
-  (ipomoea)-[:IN_FAMILY]->(convolvulaceae),
-  (sweetPotato)-[:IN_GENUS]->(ipomoea),
-  (waterSpinach)-[:IN_GENUS]->(ipomoea)
-  
-
 // Cucurbitaceae family
 CREATE (cucurbitaceae:Family {name:'Cucurbitaceae'})
 CREATE (cucumis:Genus {name:'Cucumis'}) 
