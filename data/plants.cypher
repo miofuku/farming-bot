@@ -2,23 +2,6 @@
 // This is an initialization script for the farming app
 // Run it only once ;)
 
-  
-// Fabaceae family
-CREATE (fabaceae:Family {name:'Fabaceae'})
-CREATE (vigna:Genus {name:'Vigna'})  
-CREATE (pisum:Genus {name:'Pisum'}) 
-CREATE (glycine:Genus {name:'Glycine'}) 
-CREATE (yardlongBean:Vegetable {name:'Yardlong Bean', height:'high', soil_humid:'dry', fertile:'+', fert_growth:['N'], fert_fruit:['N','P','K'], ph:[6,7.5], season:['spring','summer'], light_hour:10, temp_seed:[25,30], temp_grow:[18,25], temp_fruit:[25,28], water_seed:'50%', water_grow:'70%', days:100})  
-CREATE (pea:Vegetable {name:'Pea', height:'high', soil_humid:'dry', fertile:'+', fert_growth:['N'], fert_fruit:['N','P','K'], ph:[6,7.2], season:['spring','autumn'], light_hour:10, temp_seed:[15,18], temp_grow:[12,20], temp_fruit:[15,20], water_seed:'50%', water_grow:'70%', days:80})   
-CREATE (edamame:Vegetable {name:'Edamame', height:'medium', soil_humid:'dry', fertile:'+', fert_growth:['N'], fert_fruit:['N','P','K'], ph:[6,7.5], season:['spring','autumn'], light_hour:6, temp_seed:[15,20], temp_grow:[20,25], water_seed:'80%', water_grow:'70%', days:90})     
-CREATE 
-  (vigna)-[:IN_FAMILY]->(fabaceae),
-  (pisum)-[:IN_FAMILY]->(fabaceae),
-  (glycine)-[:IN_FAMILY]->(fabaceae),
-  (yardlongBean)-[:IN_GENUS]->(vigna),
-  (pea)-[:IN_GENUS]->(pisum),
-  (edamame)-[:IN_GENUS]->(glycine)  
-
 
 // Lamiaceae family
 CREATE (lamiaceae:Family {name:'Lamiaceae'})
