@@ -2,15 +2,6 @@
 // This is an initialization script for the farming app
 // Run it only once ;)
 
-
-// Ericaceae family
-CREATE (ericaceae:Family {name:'Ericaceae'})
-CREATE (vaccinium:Genus {name:'Vaccinium'}) 
-CREATE (blueberry:Vegetable {name:'Blueberry', height:'low', soil_humid:'wet', fertile:'-', fert_growth:['N'], fert_fruit:['N','P','K'], ph:[4,5], season:['spring','summer'], light_hour:8, temp_seed:[20,25], temp_grow:[15,25], temp_fruit:[20,25], water_seed:'70%', water_grow:'70%', days:100})  
-CREATE 
-  (vaccinium)-[:IN_FAMILY]->(ericaceae),
-  (blueberry)-[:IN_GENUS]->(vaccinium)
-  
   
 // Fabaceae family
 CREATE (fabaceae:Family {name:'Fabaceae'})
