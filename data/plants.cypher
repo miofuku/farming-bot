@@ -3,31 +3,6 @@
 // Run it only once ;)
 
 
-// Cucurbitaceae family
-CREATE (cucurbitaceae:Family {name:'Cucurbitaceae'})
-CREATE (cucumis:Genus {name:'Cucumis'}) 
-CREATE (citrullus:Genus {name:'Citrullus'}) 
-CREATE (cucurbita:Genus {name:'Cucurbita'}) 
-CREATE (lagenaria:Genus {name:'Lagenaria'})
-CREATE (cucumber:Vegetable {name:'Cucumber', height:'high', soil_humid:'wet', fertile:'-', fert_growth:['N','P','K'], fert_fruit:['P','K'], ph:[6.5,7], season:['spring','summer'], light_hour:8, temp_seed:[18,25], temp_grow:[20,24], temp_fruit:[25,30], water_seed:'85%', water_grow:'95%', days:70})
-CREATE (melon:Fruit {name:'Melon', height:'low', soil_humid:'wet', fertile:'-', fert_growth:['N','P','K'], fert_fruit:['N','K'], ph:[6,6.8], season:['spring','summer'], light_hour:12, temp_seed:[25,30], temp_grow:[20,32], temp_fruit:[25,30], water_seed:'65%', water_grow:'75%', water_fruit:'55%', days:70})    
-CREATE (watermelon:Fruit {name:'Watermelon', height:'low', soil_humid:'dry', fertile:'-', fert_growth:['N'], fert_fruit:['K'], ph:[6,6.8], season:['spring','summer'], light_hour:10, temp_seed:[25,30], temp_grow:[22,28], temp_fruit:[28,30], water_seed:'60%', water_grow:'70%', water_fruit:'70%', days:90})
-CREATE (zucchini:Vegetable {name:'Zucchini', height:'high', soil_humid:'wet', fertile:'-', fert_growth:['N','P','K'], fert_fruit:['K'], ph:[5,6.8], season:['spring','summer'], light_hour:8, temp_seed:[25,30], temp_grow:[13,25], temp_fruit:[20,25], water_seed:'70%', water_grow:'80%', water_fruit:'70%', days:90}) 
-CREATE (bottleGourd:Vegetable {name:'Bottle Gourd', height:'high', soil_humid:'wet', fertile:'-', fert_growth:['N','P','K'], fert_fruit:['K'], ph:[6.5,7], season:['spring','summer'], light_hour:8, temp_seed:[20,30], temp_grow:[20,28], water_seed:'70%', water_grow:'70%', days:90}) 
-CREATE (pumpkin:Vegetable {name:'Pumpkin', height:'low', soil_humid:'dry', fertile:'-', fert_growth:['N','P','K'], fert_fruit:['K'], ph:[5.5,6.8], season:['spring','summer'], light_hour:8, temp_seed:[25,30], temp_grow:[15,25], temp_fruit:[25,27], water_seed:'70%', water_grow:'70%', days:50}) 
-CREATE 
-  (cucumis)-[:IN_FAMILY]->(cucurbitaceae),
-  (citrullus)-[:IN_FAMILY]->(cucurbitaceae),
-  (cucurbita)-[:IN_FAMILY]->(cucurbitaceae),
-  (lagenaria)-[:IN_FAMILY]->(cucurbitaceae),  
-  (cucumber)-[:IN_GENUS]->(cucumis),
-  (melon)-[:IN_GENUS]->(cucumis),
-  (watermelon)-[:IN_GENUS]->(citrullus),
-  (zucchini)-[:IN_GENUS]->(cucurbita),
-  (bottleGourd)-[:IN_GENUS]->(lagenaria),
-  (pumpkin)-[:IN_GENUS]->(cucurbita)
-
-
 // Ericaceae family
 CREATE (ericaceae:Family {name:'Ericaceae'})
 CREATE (vaccinium:Genus {name:'Vaccinium'}) 
