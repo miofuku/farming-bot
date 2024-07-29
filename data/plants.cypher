@@ -2,29 +2,6 @@
 // This is an initialization script for the farming app
 // Run it only once ;)
 
-
-// Solanaceae family
-CREATE (solanaceae:Family {name:'Solanaceae'})
-CREATE (solanum:Genus {name:'Solanum'})
-CREATE (capsicum:Genus {name:'Capsicum'})
-CREATE (physalis:Genus {name:'Physalis'})
-CREATE (tomato:Vegetable {name:'Tomato', height:'medium', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['N','P','K'], ph:[6,7], season:['spring','summer'], light_hour:'6', temp_earth:[18,23], temp_seed:[10,25], temp_grow:[15,30], temp_fruit:[16,26], water_seed:'70%', water_grow:'80%', days:80})
-CREATE (eggPlant:Vegetable {name:'Egg Plant', height:'medium', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['N','K'], ph:[6.8,7.3], season:['spring','summer'], light_hour:'8', temp_seed:[15,25], temp_grow:[20,30], temp_fruit:[25,30], water_grow:'60%', water_fruit:'80%', days:70})
-CREATE (chiliPepper:Vegetable {name:'Chili Pepper', height:'medium', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['N','K'], ph:[6.2,7], season:['spring','summer'], light_hour:'8', temp_seed:[25,30], temp_grow:[20,30], temp_fruit:[20,25], water_grow:'70%', water_fruit:'80%', days:80})
-CREATE (bellPepper:Vegetable {name:'Bell Pepper', height:'medium', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['N','K'], ph:[6.2,7], season:['spring','summer'], light_hour:'8', temp_seed:[25,30], temp_grow:[20,30], temp_fruit:[20,25], water_grow:'70%', water_fruit:'80%', days:80})
-CREATE (potato:Vegetable {name:'Potato', height:'medium', soil_humid:'half-dry', fertile:'=', fert_growth:['N'], fert_fruit:['N','K'], ph:[6,7], season:['spring','summer'], light_hour:'10', temp_seed:[15,20], temp_grow:[16,22], water_seed:'50%', water_grow:'70%', days:100})
-CREATE (physalisFruit:Vegetable {name:'Physalis Fruit', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[6.5,7.5], season:['spring','summer'], light_hour:'10', temp_seed:[25,30], temp_grow:[20,25], water_seed:'60%', water_grow:'80%', water_fruit:'60%',days:80})
-CREATE 
-  (solanum)-[:IN_FAMILY]->(solanaceae),
-  (capsicum)-[:IN_FAMILY]->(solanaceae),
-  (physalis)-[:IN_FAMILY]->(solanaceae),
-  (tomato)-[:IN_GENUS]->(solanum),
-  (eggPlant)-[:IN_GENUS]->(solanum),
-  (chiliPepper)-[:IN_GENUS]->(capsicum),
-  (bellPepper)-[:IN_GENUS]->(capsicum),
-  (potato)-[:IN_GENUS]->(solanum),
-  (physalisFruit)-[:IN_GENUS]->(physalis)
- 
  
 // Crop rotation
 CREATE
