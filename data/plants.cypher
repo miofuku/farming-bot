@@ -2,15 +2,6 @@
 // This is an initialization script for the farming app
 // Run it only once ;)
 
-  
-// Malvaceae family
-CREATE (malvaceae:Family {name:'Malvaceae'})
-CREATE (abelmoschus:Genus {name:'Abelmoschus'}) 
-CREATE (okra:Vegetable {name:'Okra', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['K'], ph:[6.6,7], season:['summer'], light_hour:10, temp_seed:[20,30], temp_grow:[21,26], temp_fruit:[26,30], water_seed:'70%', water_grow:'80%', water_fruit:'90%', days:70})  
-CREATE 
-  (abelmoschus)-[:IN_FAMILY]->(malvaceae),
-  (okra)-[:IN_GENUS]->(abelmoschus)
-
 
 // Poaceae family
 CREATE (poaceae:Family {name:'Poaceae'})
