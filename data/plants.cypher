@@ -2,23 +2,6 @@
 // This is an initialization script for the farming app
 // Run it only once ;)
 
-
-// Lamiaceae family
-CREATE (lamiaceae:Family {name:'Lamiaceae'})
-CREATE (perilla:Genus {name:'Perilla'}) 
-CREATE (ocimum:Genus {name:'Ocimum'}) 
-CREATE (mentha:Genus {name:'Mentha'}) 
-CREATE (shiso:Vegetable {name:'Shiso', height:'low', soil_humid:'wet', fertile:'-', fert_growth:['N'], fert_fruit:['N','K'], ph:[6.6,7], season:['spring','summer'], light_hour:6, temp_seed:[18,20], temp_grow:[16,22], temp_fruit:[22,28], water_seed:'70%', water_grow:'70%', water_fruit:'80%', days:60})  
-CREATE (basil:Vegetable {name:'Basil', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['N','K'], ph:[6,7], season:['spring','summer'], light_hour:8, temp_seed:[20,25], temp_grow:[15,28], water_seed:'70%', water_grow:'70%', days:60})  
-CREATE (mint:Vegetable {name:'Mint', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['N','K'], ph:[6,7.5], season:['spring','summer'], light_hour:8, temp_seed:[20,25], temp_grow:[20,30], water_seed:'70%', water_grow:'70%', days:60})  
-CREATE 
-  (perilla)-[:IN_FAMILY]->(lamiaceae),
-  (ocimum)-[:IN_FAMILY]->(lamiaceae),
-  (mentha)-[:IN_FAMILY]->(lamiaceae),
-  (shiso)-[:IN_GENUS]->(perilla),
-  (basil)-[:IN_GENUS]->(ocimum),
-  (mint)-[:IN_GENUS]->(ocimum)
-  
   
 // Malvaceae family
 CREATE (malvaceae:Family {name:'Malvaceae'})
