@@ -3,16 +3,6 @@
 // Run it only once ;)
 
 
-
-// Rosaceae family
-CREATE (rosaceae:Family {name:'Rosaceae'})
-CREATE (fragaria:Genus {name:'Fragaria'}) 
-CREATE (strawberry:Fruit {name:'Strawberry', height:'low', soil_humid:'half-dry', fertile:'-', fert_growth:['N'], fert_fruit:['P','K'], ph:[5.8,7], season:['spring','autumn'], light_hour:8, temp_seed:[15,20], temp_grow:[18,25], temp_fruit:[18,20], water_seed:'70%', water_grow:'80%', water_fruit:'60%', days:90})
-CREATE 
-  (fragaria)-[:IN_FAMILY]->(rosaceae),
-  (strawberry)-[:IN_GENUS]->(fragaria)
-
-  
 // Solanaceae family
 CREATE (solanaceae:Family {name:'Solanaceae'})
 CREATE (solanum:Genus {name:'Solanum'})
