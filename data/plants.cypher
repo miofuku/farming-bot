@@ -3,14 +3,6 @@
 // Run it only once ;)
 
 
-// Poaceae family
-CREATE (poaceae:Family {name:'Poaceae'})
-CREATE (zea:Genus {name:'Zea'}) 
-CREATE (corn:Fruit {name:'Corn', height:'high', soil_humid:'dry', fertile:'+', fert_growth:['N','K'], fert_fruit:['N','K'], ph:[6.5,7], season:['spring','summer','autumn'], light_hour:8, temp_seed:[15,20], temp_grow:[24,27], temp_fruit:[22,24], water_seed:'70%', water_grow:'60%', water_fruit:'70%', days:90})
-CREATE 
-  (zea)-[:IN_FAMILY]->(poaceae),
-  (corn)-[:IN_GENUS]->(zea)
-
 
 // Rosaceae family
 CREATE (rosaceae:Family {name:'Rosaceae'})
