@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-function Movie(_node) {
+function Plant(_node) {
   _.extend(this, _node.properties);
 
   if (this.id) {
