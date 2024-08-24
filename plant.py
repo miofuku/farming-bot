@@ -14,16 +14,35 @@ from typing_extensions import LiteralString
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-
-url = os.getenv("NEO4J_URI", "neo4j+s://demo.neo4jlabs.com")
-username = os.getenv("NEO4J_USER", "movies")
-password = os.getenv("NEO4J_PASSWORD", "movies")
+uri = os.getenv("NEO4J_URI", "neo4j+s://95050584.databases.neo4j.io")
+username = os.getenv("NEO4J_USER", "neo4j")
+password = os.getenv("NEO4J_PASSWORD", "vD8NZsZ8leNzS6IfHRR9skig5ViyhHnZ49oiIzyAjjc")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
-database = os.getenv("NEO4J_DATABASE", "movies")
+aura_instanceid = os.getenv("AURA_INSTANCEID", "95050584")
+aura_instancename = os.getenv("AURA_INSTANCENAME", "Instance01")
 
 port = int(os.getenv("PORT", 8080))
 
 shared_context = {}
+
+cypher_files = [
+    "data/base.cypher",
+    "data/rotate.cypher",
+    "data/amaryllidaceae.cypher",
+    "data/apiaceae.cypher",
+    "data/asteraceae.cypher",
+    "data/brassicaceae.cypher",
+    "data/convolvulaceae.cypher",
+    "data/cucurbitaceae.cypher",
+    "data/ericaceae.cypher",
+    "data/fabaceae.cypher",
+    "data/lamiaceae.cypher",
+    "data/malvaceae.cypher",
+    "data/poaceae.cypher",
+    "data/rosaceae.cypher",
+    "data/solanaceae.cypher"
+]
+
 
 
 def query(q: LiteralString) -> LiteralString:
@@ -33,10 +52,31 @@ def query(q: LiteralString) -> LiteralString:
     return cast(LiteralString, dedent(q).strip())
 
 
+async def run_cypher_file(driver: neo4j.AsyncDriver, file_path: str):
+    with open(file_path, 'r') as file:
+        cypher_script = file.read()
+
+    async with driver.session() as session:
+        result = await session.run(cypher_script)
+        return await result.consume()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    driver = AsyncGraphDatabase.driver(url, auth=(username, password))
+    driver = AsyncGraphDatabase.driver(uri, auth=(username, password))
     shared_context["driver"] = driver
+
+    # Run Cypher files
+    for file in cypher_files:
+        file_path = os.path.join(PATH, file)
+        logging.info(f"Running {file}...")
+        try:
+            result = await run_cypher_file(driver, file_path)
+            logging.info(f"Nodes created: {result.counters.nodes_created}")
+            logging.info(f"Relationships created: {result.counters.relationships_created}")
+        except Exception as e:
+            logging.error(f"Error running {file}: {str(e)}")
+
     yield
     await driver.close()
 
@@ -52,39 +92,38 @@ app = FastAPI(lifespan=lifespan)
 async def get_index():
     return FileResponse(os.path.join(PATH, "static", "index.html"))
 
+#
+# def serialize_movie(movie):
+#     return {
+#         "id": movie["id"],
+#         "title": movie["title"],
+#         "summary": movie["summary"],
+#         "released": movie["released"],
+#         "duration": movie["duration"],
+#         "rated": movie["rated"],
+#         "tagline": movie["tagline"],
+#         "votes": movie.get("votes", 0)
+#     }
+#
+#
+# def serialize_cast(cast):
+#     return {
+#         "name": cast[0],
+#         "job": cast[1],
+#         "role": cast[2]
+#     }
 
-def serialize_movie(movie):
-    return {
-        "id": movie["id"],
-        "title": movie["title"],
-        "summary": movie["summary"],
-        "released": movie["released"],
-        "duration": movie["duration"],
-        "rated": movie["rated"],
-        "tagline": movie["tagline"],
-        "votes": movie.get("votes", 0)
-    }
 
-
-def serialize_cast(cast):
-    return {
-        "name": cast[0],
-        "job": cast[1],
-        "role": cast[2]
-    }
-
-
-@app.get("/graph")
-async def get_graph(limit: int = 100):
+@app.get("/plant_families")
+async def get_plant_families():
     records, _, _ = await get_driver().execute_query(
         query("""
-            MATCH (m:Movie)<-[:ACTED_IN]-(a:Person)
-            RETURN m.title AS movie, collect(a.name) AS cast
-            LIMIT $limit
+            MATCH (f:Family)
+            RETURN f.name AS family
+            ORDER BY family
         """),
-        database_=database,
+        database_="neo4j",
         routing_="r",
-        limit=limit,
     )
     nodes = []
     rels = []
@@ -102,71 +141,43 @@ async def get_graph(limit: int = 100):
                 source = i
                 i += 1
             rels.append({"source": source, "target": target})
-    return {"nodes": nodes, "links": rels}
+    return [record["family"] for record in records]
 
 
-@app.get("/search")
-async def get_search(q: Optional[str] = None):
-    if q is None:
-        return []
+@app.get("/plant_rotation")
+async def get_plant_rotation(family: str):
     records, _, _ = await get_driver().execute_query(
         query("""
-            MATCH (movie:Movie)
-            WHERE toLower(movie.title) CONTAINS toLower($title)
-            RETURN movie
+            MATCH (f1:Family {name: $family})-[r:ROTATE_AFTER]->(f2:Family)
+            RETURN f2.name AS rotateAfter, r.weight AS weight
+            ORDER BY weight DESC
         """),
-        title=q,
-        database_=database,
+        family=family,
+        database_="neo4j",
         routing_="r",
     )
-    return [serialize_movie(record["movie"]) for record in records]
+    return [{"family": record["rotateAfter"], "weight": record["weight"]} for record in records]
 
 
-@app.get("/movie/{title}")
-async def get_movie(title: str):
-    result = await get_driver().execute_query(
+@app.get("/plants_in_family")
+async def get_plants_in_family(family: str):
+    records, _, _ = await get_driver().execute_query(
         query("""
-            MATCH (movie:Movie {title:$title})
-            OPTIONAL MATCH (movie)<-[r]-(person:Person)
-            RETURN movie.title as title,
-            COLLECT(
-                [person.name, HEAD(SPLIT(TOLOWER(TYPE(r)), '_')), r.roles]
-            ) AS cast
-            LIMIT 1
+            MATCH (f:Family {name: $family})<-[:BELONGS_TO]-(:Genus)<-[:BELONGS_TO]-(p:Plant)
+            RETURN p.name AS plant, p.binomial_name AS binomial_name
+            ORDER BY plant
         """),
-        title=title,
-        database_=database,
+        family=family,
+        database_="neo4j",
         routing_="r",
-        result_transformer_=neo4j.AsyncResult.single,
     )
-    if result is None:
-        raise HTTPException(status_code=404, detail="Movie not found")
-
-    return {"title": result["title"],
-            "cast": [serialize_cast(member)
-                     for member in result["cast"]]}
-
-
-@app.post("/movie/{title}/vote")
-async def vote_in_movie(title: str):
-    summary = await get_driver().execute_query(
-        query("""
-            MATCH (m:Movie {title: $title})
-            SET m.votes = coalesce(m.votes, 0) + 1;
-        """),
-        database_=database,
-        title=title,
-        result_transformer_=neo4j.AsyncResult.consume,
-    )
-    updates = summary.counters.properties_set
-
-    return {"updates": updates}
+    return [{"name": record["plant"], "binomial_name": record["binomial_name"]} for record in records]
 
 
 if __name__ == "__main__":
     import uvicorn
 
     logging.root.setLevel(logging.INFO)
-    logging.info("Starting on port %d, database is at %s", port, url)
+    logging.info("Starting on port %d, database is at %s", port, uri)
 
     uvicorn.run(app, port=port)
