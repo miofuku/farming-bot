@@ -14,12 +14,12 @@ from typing_extensions import LiteralString
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-uri = os.getenv("NEO4J_URI", "neo4j+s://95050584.databases.neo4j.io")
-username = os.getenv("NEO4J_USER", "neo4j")
-password = os.getenv("NEO4J_PASSWORD", "vD8NZsZ8leNzS6IfHRR9skig5ViyhHnZ49oiIzyAjjc")
+uri = os.getenv("NEO4J_URI", "neo4j+s://instance.databases.neo4j.io")
+username = os.getenv("NEO4J_USER", "username")
+password = os.getenv("NEO4J_PASSWORD", "password")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
-aura_instanceid = os.getenv("AURA_INSTANCEID", "95050584")
-aura_instancename = os.getenv("AURA_INSTANCENAME", "Instance01")
+aura_instanceid = os.getenv("AURA_INSTANCEID", "id")
+aura_instancename = os.getenv("AURA_INSTANCENAME", "name")
 
 port = int(os.getenv("PORT", 8080))
 
