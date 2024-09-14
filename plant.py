@@ -43,14 +43,8 @@ cypher_files = [
     "data/solanaceae.cypher"
 ]
 
-
-
 def query(q: LiteralString) -> LiteralString:
-    # this is a safe transform:
-    # no way for cypher injection by trimming whitespace
-    # hence, we can safely cast to LiteralString
     return cast(LiteralString, dedent(q).strip())
-
 
 async def run_cypher_file(driver: neo4j.AsyncDriver, file_path: str):
     with open(file_path, 'r') as file:
@@ -59,7 +53,6 @@ async def run_cypher_file(driver: neo4j.AsyncDriver, file_path: str):
     async with driver.session() as session:
         result = await session.run(cypher_script)
         return await result.consume()
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -80,39 +73,25 @@ async def lifespan(app: FastAPI):
     yield
     await driver.close()
 
-
 def get_driver() -> neo4j.AsyncDriver:
     return shared_context["driver"]
 
-
 app = FastAPI(lifespan=lifespan)
-
 
 @app.get("/")
 async def get_index():
     return FileResponse(os.path.join(PATH, "static", "index.html"))
 
-#
-# def serialize_movie(movie):
-#     return {
-#         "id": movie["id"],
-#         "title": movie["title"],
-#         "summary": movie["summary"],
-#         "released": movie["released"],
-#         "duration": movie["duration"],
-#         "rated": movie["rated"],
-#         "tagline": movie["tagline"],
-#         "votes": movie.get("votes", 0)
-#     }
-#
-#
-# def serialize_cast(cast):
-#     return {
-#         "name": cast[0],
-#         "job": cast[1],
-#         "role": cast[2]
-#     }
-
+def serialize_plant(plant):
+    return {
+        "name": plant["name"],
+        "binomial_name": plant["binomial_name"],
+        "height": plant["height"],
+        "period_seed": plant["period_seed"],
+        "period_grow": plant["period_grow"],
+        "period_yield": plant["period_yield"],
+        "period_all": plant["period_all"]
+    }
 
 @app.get("/plant_families")
 async def get_plant_families():
@@ -125,24 +104,7 @@ async def get_plant_families():
         database_="neo4j",
         routing_="r",
     )
-    nodes = []
-    rels = []
-    i = 0
-    for record in records:
-        nodes.append({"title": record["movie"], "label": "movie"})
-        target = i
-        i += 1
-        for name in record["cast"]:
-            actor = {"title": name, "label": "actor"}
-            try:
-                source = nodes.index(actor)
-            except ValueError:
-                nodes.append(actor)
-                source = i
-                i += 1
-            rels.append({"source": source, "target": target})
     return [record["family"] for record in records]
-
 
 @app.get("/plant_rotation")
 async def get_plant_rotation(family: str):
@@ -158,21 +120,43 @@ async def get_plant_rotation(family: str):
     )
     return [{"family": record["rotateAfter"], "weight": record["weight"]} for record in records]
 
-
 @app.get("/plants_in_family")
 async def get_plants_in_family(family: str):
     records, _, _ = await get_driver().execute_query(
         query("""
             MATCH (f:Family {name: $family})<-[:BELONGS_TO]-(:Genus)<-[:BELONGS_TO]-(p:Plant)
-            RETURN p.name AS plant, p.binomial_name AS binomial_name
-            ORDER BY plant
+            RETURN p
+            ORDER BY p.name
         """),
         family=family,
         database_="neo4j",
         routing_="r",
     )
-    return [{"name": record["plant"], "binomial_name": record["binomial_name"]} for record in records]
+    return [serialize_plant(record["p"]) for record in records]
 
+@app.get("/plant_graph")
+async def get_plant_graph():
+    records, _, _ = await get_driver().execute_query(
+        query("""
+            MATCH (f:Family)<-[:BELONGS_TO]-(g:Genus)<-[:BELONGS_TO]-(p:Plant)
+            RETURN f.name AS family, collect(p.name) AS plants
+            LIMIT 100
+        """),
+        database_="neo4j",
+        routing_="r",
+    )
+    nodes = []
+    links = []
+    for record in records:
+        family_node = {"id": record["family"], "label": "family", "title": record["family"]}
+        if family_node not in nodes:
+            nodes.append(family_node)
+        for plant in record["plants"]:
+            plant_node = {"id": plant, "label": "plant", "title": plant}
+            if plant_node not in nodes:
+                nodes.append(plant_node)
+            links.append({"source": plant, "target": record["family"]})
+    return {"nodes": nodes, "links": links}
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,13 +1,12 @@
 require('file-loader?name=[name].[ext]!../node_modules/neo4j-driver/lib/browser/neo4j-web.min.js');
-const Movie = require('./models/Movie');
-const MovieCast = require('./models/MovieCast');
+const Plant = require('./models/Plant');
+const PlantRotation = require('./models/PlantRotation');
 const _ = require('lodash');
 
 const neo4j = window.neo4j;
 const neo4jUri = process.env.NEO4J_URI;
 let neo4jVersion = process.env.NEO4J_VERSION;
 if (neo4jVersion === '') {
-  // assume Neo4j 4 by default
   neo4jVersion = '4';
 }
 let database = process.env.NEO4J_DATABASE;
@@ -21,18 +20,13 @@ const driver = neo4j.driver(
 
 console.log(`Database running at ${neo4jUri}`)
 
-function searchMovies(title) {
+function getPlantFamilies() {
   const session = driver.session({database: database});
   return session.readTransaction((tx) =>
-      tx.run('MATCH (movie:Movie) \
-      WHERE toLower(movie.title) CONTAINS toLower($title) \
-      RETURN movie',
-      {title})
+      tx.run('MATCH (f:Family) RETURN f.name AS family ORDER BY family')
     )
     .then(result => {
-      return result.records.map(record => {
-        return new Movie(record.get('movie'));
-      });
+      return result.records.map(record => record.get('family'));
     })
     .catch(error => {
       throw error;
@@ -42,21 +36,18 @@ function searchMovies(title) {
     });
 }
 
-function getMovie(title) {
+function getPlantRotation(family) {
   const session = driver.session({database: database});
   return session.readTransaction((tx) =>
-      tx.run("MATCH (movie:Movie {title:$title}) \
-      OPTIONAL MATCH (movie)<-[r]-(person:Person) \
-      RETURN movie.title AS title, \
-      collect([person.name, \
-           head(split(toLower(type(r)), '_')), r.roles]) AS cast \
-      LIMIT 1", {title}))
+      tx.run('MATCH (f1:Family {name: $family})-[r:ROTATE_AFTER]->(f2:Family) \
+              RETURN f2.name AS rotateAfter, r.weight AS weight \
+              ORDER BY weight DESC', {family})
+    )
     .then(result => {
-      if (_.isEmpty(result.records))
-        return null;
-
-      const record = result.records[0];
-      return new MovieCast(record.get('title'), record.get('cast'));
+      return new PlantRotation(family, result.records.map(record => ({
+        name: record.get('rotateAfter'),
+        weight: record.get('weight')
+      })));
     })
     .catch(error => {
       throw error;
@@ -66,38 +57,42 @@ function getMovie(title) {
     });
 }
 
-function voteInMovie(title) {
-  const session = driver.session({ database: database });
-  return session.writeTransaction((tx) =>
-      tx.run("MATCH (m:Movie {title: $title}) \
-        SET m.votes = coalesce(m.votes, 0) + 1", { title }))
+function getPlantsInFamily(family) {
+  const session = driver.session({database: database});
+  return session.readTransaction((tx) =>
+      tx.run('MATCH (f:Family {name: $family})<-[:BELONGS_TO]-(:Genus)<-[:BELONGS_TO]-(p:Plant) \
+              RETURN p', {family})
+    )
     .then(result => {
-      return result.summary.counters.updates().propertiesSet
+      return result.records.map(record => new Plant(record.get('p')));
+    })
+    .catch(error => {
+      throw error;
     })
     .finally(() => {
       return session.close();
     });
 }
 
-function getGraph() {
+function getPlantGraph() {
   const session = driver.session({database: database});
   return session.readTransaction((tx) =>
-    tx.run('MATCH (m:Movie)<-[:ACTED_IN]-(a:Person) \
-    RETURN m.title AS movie, collect(a.name) AS cast \
-    LIMIT $limit', {limit: neo4j.int(100)}))
+    tx.run('MATCH (f:Family)<-[:BELONGS_TO]-(g:Genus)<-[:BELONGS_TO]-(p:Plant) \
+            RETURN f.name AS family, collect(p.name) AS plants \
+            LIMIT $limit', {limit: neo4j.int(100)}))
     .then(results => {
       const nodes = [], rels = [];
       let i = 0;
       results.records.forEach(res => {
-        nodes.push({title: res.get('movie'), label: 'movie'});
+        nodes.push({title: res.get('family'), label: 'family'});
         const target = i;
         i++;
 
-        res.get('cast').forEach(name => {
-          const actor = {title: name, label: 'actor'};
-          let source = _.findIndex(nodes, actor);
+        res.get('plants').forEach(name => {
+          const plant = {title: name, label: 'plant'};
+          let source = _.findIndex(nodes, plant);
           if (source === -1) {
-            nodes.push(actor);
+            nodes.push(plant);
             source = i;
             i++;
           }
@@ -115,7 +110,7 @@ function getGraph() {
     });
 }
 
-exports.searchMovies = searchMovies;
-exports.getMovie = getMovie;
-exports.getGraph = getGraph;
-exports.voteInMovie = voteInMovie;
+exports.getPlantFamilies = getPlantFamilies;
+exports.getPlantRotation = getPlantRotation;
+exports.getPlantsInFamily = getPlantsInFamily;
+exports.getPlantGraph = getPlantGraph;

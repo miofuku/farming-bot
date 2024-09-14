@@ -2,66 +2,52 @@ const api = require('./neo4jAPI');
 
 $(function () {
   renderGraph();
-  search();
+  loadPlantFamilies();
 
-  $("#search").submit(e => {
-    e.preventDefault();
-    search();
+  $("#family-select").change(e => {
+    const family = $(e.target).val();
+    if (family) {
+      showPlantFamily(family);
+    }
   });
 });
 
-function showMovie(title) {
+function showPlantFamily(family) {
   api
-    .getMovie(title)
-    .then(movie => {
-      if (!movie) return;
+    .getPlantRotation(family)
+    .then(rotation => {
+      if (!rotation) return;
 
-      $("#title").text(movie.title);
-      $("#poster").attr("src","https://neo4j-documentation.github.io/developer-resources/language-guides/assets/posters/"+encodeURIComponent(movie.title)+".jpg");
-      const $list = $("#crew").empty();
-      movie.cast.forEach(cast => {
-        $list.append($("<li>" + cast.name + " " + cast.job + (cast.job === "acted" ? " as " + cast.role : "") + "</li>"));
+      $("#family-name").text(rotation.familyName);
+      const $list = $("#rotation-list").empty();
+      rotation.rotations.forEach(rot => {
+        $list.append($("<li>" + rot.name + " (weight: " + rot.weight + ")</li>"));
       });
-      $("#vote")
-        .unbind("click")
-        .click(function () {
-          voteInMovie(movie.title)
-        })
-    }, "json");
-}
+    });
 
-function voteInMovie(title) {
-  api.voteInMovie(title)
-    .then(() => search(false))
-    .then(() => showMovie(title));
-}
-
-function search(showFirst = true) {
-  const query = $("#search").find("input[name=search]").val();
   api
-    .searchMovies(query)
-    .then(movies => {
-      const t = $("table#results tbody").empty();
+    .getPlantsInFamily(family)
+    .then(plants => {
+      const $table = $("#plants-table tbody").empty();
+      plants.forEach(plant => {
+        $('<tr>')
+          .append($('<td>').text(plant.name))
+          .append($('<td>').text(plant.binomial_name))
+          .append($('<td>').text(plant.height))
+          .appendTo($table);
+      });
+    });
+}
 
-      if (movies) {
-        movies.forEach((movie, index) => {
-          $('<tr>' +
-              `<td class='movie'>${movie.title}</td>` +
-              `<td>${movie.released}</td>` +
-              `<td>${movie.tagline}</td>` +
-              `<td id='votes${index}'>${movie.votes}</td>` +
-            '</tr>')
-            .appendTo(t)
-            .click(function() {
-              showMovie($(this).find("td.movie").text());
-            })
-        });
-
-        const first = movies[0];
-        if (first && showFirst) {
-          return showMovie(first.title);
-        }
-      }
+function loadPlantFamilies() {
+  api
+    .getPlantFamilies()
+    .then(families => {
+      const $select = $("#family-select").empty();
+      $select.append($('<option value="">Select a plant family</option>'));
+      families.forEach(family => {
+        $select.append($('<option>').text(family).val(family));
+      });
     });
 }
 
@@ -75,7 +61,7 @@ function renderGraph() {
     .attr("pointer-events", "all");
 
   api
-    .getGraph()
+    .getPlantGraph()
     .then(graph => {
       force.nodes(graph.nodes).links(graph.links).start();
 
@@ -92,13 +78,11 @@ function renderGraph() {
         .attr("r", 10)
         .call(force.drag);
 
-      // html title attribute
       node.append("title")
         .text(d => {
           return d.title;
         });
 
-      // force feed algo ticks
       force.on("tick", () => {
         link.attr("x1", d => {
           return d.source.x;
