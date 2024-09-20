@@ -28,13 +28,13 @@ This application is a web-based tool for exploring and visualizing plant data, i
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/plant-database-app.git
-   cd plant-database-app
+   git clone https://github.com/miofuku/farming-bot.git
+   cd farming-bot
    ```
 
 2. Set up a virtual environment and install Python dependencies:
    ```
-   python -m venv venv
+   python3 -m venv venv
    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
    pip install -r requirements.txt
    ```
